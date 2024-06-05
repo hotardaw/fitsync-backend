@@ -14,13 +14,6 @@ const userExerciseEntrySchema = new mongoose.Schema({
     ref: 'Exercise'
   },
   timestamps: true,
-  //   dateTimeAdded: {
-  //     type: Date,
-  //     required: true,
-  //     default: () => {
-  //       return new Date(Math.floor(Date.now() / 1000) * 1000)
-  //     }
-  //   },
 
   sets: {
     type: Number,
@@ -39,19 +32,23 @@ const userExerciseEntrySchema = new mongoose.Schema({
       },
       {
         type: Object,
-        required: [duration, unit],
+        required: [duration, timeUnit],
         properties: {
           duration: {
             type: Number,
             required: true
           },
-          unit: { type: String, enum: ['minutes', 'seconds'], required: true }
+          timeUnit: {
+            type: String,
+            enum: ['minutes', 'seconds'],
+            required: true
+          }
         }
       }
     ]
   },
   resistance: {
-    required: true,
+    required: false,
     oneOf: [
       // in case it's band-based, bodyweight or another non-weighted exercise
       {

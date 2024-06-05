@@ -19,7 +19,7 @@ const getAllUsers = async (req, res) => {
 // @route POST /users
 // @access Private
 const createNewUser = async (req, res) => {
-  const { email, password, roles } = req.body
+  const { email, username, password, roles } = req.body
 
   // confirm data
   if (!email || !password) {
@@ -32,13 +32,14 @@ const createNewUser = async (req, res) => {
       .json({ message: 'Provided email does not conform to format' })
   }
 
-  // check for duplicates
-  const dupe = await User.findOne({ email }).lean().exec()
   // exec() explained: https://stackoverflow.com/questions/31549857/mongoose-what-does-the-exec-function-do
-  if (dupe) {
-    return res
-      .status(409)
-      .json({ message: 'This email has already registered' })
+  const dupe = await User.findOne({ email, username })
+    .collation({ locale: 'en', strength: 2 })
+    .lean()
+    .exec()
+
+  if (dupe && dupe?._id.toString() !== id) {
+    return res.status(409).json({ message: 'Duplicate email or username' })
   }
 
   // hash the pw w/ 10 salt rounds

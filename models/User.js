@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
     weight: {
       type: Number,
       default: null
+      // unit
     },
     goalWeight: {
       type: Number,

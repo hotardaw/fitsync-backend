@@ -32,8 +32,10 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 
 // Use the middleware defined in the file at /routes/root for requests made to the root ('/') path:
 app.use('/', require('./routes/root'))
-
+app.use('/auth', require('./routes/authRoutes'))
 app.use('/users', require('./routes/userRoutes'))
+app.use('/exercises', require('./routes/exerciseRoutes'))
+app.use('/user-exercise-entry', require('./routes/userExerciseEntry'))
 
 // Catchall 404 page for any unanswerable requests
 app.all('*', (req, res) => {
