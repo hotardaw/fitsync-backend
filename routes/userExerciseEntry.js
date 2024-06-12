@@ -10,8 +10,8 @@ router.use(verifyJWT)
 router
   .route('/')
   .get(userExerciseEntryController.getUserExerciseEntries)
-  .post(userExerciseEntryController.AddUserExerciseEntries)
-  .patch(userExerciseEntryController.updateUserExerciseEntries)
-  .delete(userExerciseEntryController.deleteUserExerciseEntries)
+  .post(userExerciseEntryController.AddUserExerciseEntry)
+  .patch(userExerciseEntryController.updateUserExerciseEntry)
+  .delete(userExerciseEntryController.deleteUserExerciseEntry)
 
 module.exports = router

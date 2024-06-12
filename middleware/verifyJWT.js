@@ -11,9 +11,12 @@ const verifyJWT = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: 'Forbidden' })
-    req.email = decoded.UserInfo.email
-    req.user = decoded.UserInfo.username
-    req.roles = decoded.UserInfo.roles
+    console.log(decoded.UserInfo) // remove the .UserInfo to see iat & exp fields
+
+    req.email = decoded.UserInfo?.email
+    req.username = decoded.UserInfo?.username
+    req.roles = decoded.UserInfo?.roles
+
     next()
   })
 }

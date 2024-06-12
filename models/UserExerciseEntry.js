@@ -8,59 +8,41 @@ const userExerciseEntrySchema = new mongoose.Schema({
     required: true,
     ref: 'User'
   },
-  exerciseAdded: {
+  exercise: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Exercise'
   },
-  timestamps: true,
 
-  sets: {
+  reps: {
     type: Number,
-    required: true,
-    default: 1
-  },
-  repsOrTime: {
-    required: true,
-    oneOf: [
-      {
-        type: Object,
-        required: [reps],
-        properties: {
-          reps: { type: Number, required: true }
-        }
+    validate: {
+      validator: (value) => {
+        return value == null || this.duration == null // only one of duration or reps
       },
-      {
-        type: Object,
-        required: [duration, timeUnit],
-        properties: {
-          duration: {
-            type: Number,
-            required: true
-          },
-          timeUnit: {
-            type: String,
-            enum: ['minutes', 'seconds'],
-            required: true
-          }
-        }
-      }
-    ]
+      message: 'Either reps or duration are required, but not both'
+    }
   },
+  duration: {
+    type: Number, // duration in seconds
+    validate: {
+      validator: (value) => {
+        return value == null || this.reps == null // only one of duration or reps
+      },
+      message: 'Either reps or duration are required, but not both'
+    }
+  },
+
   resistance: {
-    required: false,
-    oneOf: [
-      // in case it's band-based, bodyweight or another non-weighted exercise
-      {
-        type: Number,
-        required: true
+    type: mongoose.Schema.Types.Mixed,
+    validate: {
+      validator: (value) => {
+        return typeof value === 'number' || typeof value === 'string'
       },
-      {
-        type: String,
-        required: true
-      }
-    ]
-  }
+      message: 'Resistance must either be a number or a string'
+    }
+  },
+  time: { type: Date, default: Date.now() }
 })
 
 module.exports = mongoose.model('UserExerciseEntry', userExerciseEntrySchema)

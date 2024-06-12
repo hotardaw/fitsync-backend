@@ -38,7 +38,7 @@ const createNewUser = async (req, res) => {
     .lean()
     .exec()
 
-  if (dupe && dupe?._id.toString() !== id) {
+  if (dupe) {
     return res.status(409).json({ message: 'Duplicate email or username' })
   }
 
@@ -63,8 +63,6 @@ const createNewUser = async (req, res) => {
 // @access Private
 const updateUser = async (req, res) => {
   const { id, email, roles, password, username } = req.body
-
-  // confirm data
   if (!id || !email || !Array.isArray(roles) || !roles.length) {
     return res
       .status(400)
@@ -73,7 +71,6 @@ const updateUser = async (req, res) => {
 
   // does user exist to update?
   const user = await User.findById(id).exec()
-
   if (!user) {
     return res.status(400).json({ message: 'User not found' })
   }
@@ -83,7 +80,6 @@ const updateUser = async (req, res) => {
     .collation({ locale: 'en', strength: 2 })
     .lean()
     .exec()
-
   if (dupe && dupe?._id.toString() !== id) {
     return res.status(409).json({ message: 'Duplicate email or username' })
   }
@@ -107,13 +103,11 @@ const updateUser = async (req, res) => {
 // @access Private
 const deleteUser = async (req, res) => {
   const { id } = req.body
-
   if (!id) {
     return res.status(400).json({ message: 'User ID required' })
   }
 
   const user = await User.findById(id).exec()
-
   if (!user) {
     return res.status(400).json({ message: 'User not found' })
   }
