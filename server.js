@@ -1,6 +1,3 @@
-// 2**: success
-// 4**: you messed up
-// 5**: server messed up
 require('dotenv').config()
 const express = require('express')
 const app = express()
